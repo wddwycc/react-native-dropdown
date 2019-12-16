@@ -2,6 +2,10 @@
   "name": "react-native-dropdown",
   "version": "0.0.1",
   "description": "react-native dropdown menu",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wddwycc/react-native-dropdown.git"
+  },
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
