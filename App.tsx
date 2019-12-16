@@ -1,11 +1,11 @@
+import { sequenceT } from 'fp-ts/lib/Apply'
 import * as O from 'fp-ts/lib/Option'
 import { pipe } from 'fp-ts/lib/pipeable'
-import React, { FC, useRef, useCallback, useState } from 'react'
+import React, { FC, useCallback, useRef, useState } from 'react'
 import { SafeAreaView, StatusBar, Text, TouchableOpacity } from 'react-native'
 import styled from 'styled-components'
 
-import Popup, { Handler as PopupHandler, Option } from './Popup'
-import { sequenceT } from 'fp-ts/lib/Apply'
+import Popup, { Handler as PopupHandler, Option } from './src/Popup'
 
 const Container = styled(SafeAreaView)`
   flex: 1;
