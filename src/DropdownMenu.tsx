@@ -18,6 +18,8 @@ import {
 } from 'react-native'
 import styled from 'styled-components'
 
+import { Option, Rect } from './types'
+
 const Container = styled(Modal)``
 const Bg = styled(TouchableOpacity).attrs({ activeOpacity: 1 })`
   position: absolute;
@@ -37,7 +39,7 @@ const Content = styled(View)`
 const ContentScrollView = styled(ScrollView)`
   flex-grow: 0;
 `
-const Option = styled(TouchableOpacity)`
+const OptionView = styled(TouchableOpacity)`
   padding: 8px;
 `
 const OptionBg = styled(View)<{ selected: boolean }>`
@@ -55,18 +57,6 @@ const OptionText = styled(Text)<{ selected: boolean }>`
   font-size: 12px;
   font-weight: bold;
 `
-
-interface Rect {
-  x: number
-  y: number
-  width: number
-  height: number
-}
-
-export interface Option {
-  id: string
-  title: string
-}
 
 interface Props {
   options: Option[]
@@ -120,6 +110,7 @@ const Popup: RefForwardingComponent<Handler, Props> = (
       setVisible(true)
     },
   }))
+
   return pipe(
     contentStyle,
     O.map(contentStyle_ => (
@@ -128,12 +119,12 @@ const Popup: RefForwardingComponent<Handler, Props> = (
         <Content style={contentStyle_}>
           <ContentScrollView>
             {options.map(option => (
-              <Option key={option.id} onPress={() => onSelect(option.id)}>
+              <OptionView key={option.id} onPress={() => onSelect(option.id)}>
                 <OptionBg selected={selectedId === option.id} />
                 <OptionText selected={selectedId === option.id}>
                   {option.title}
                 </OptionText>
-              </Option>
+              </OptionView>
             ))}
           </ContentScrollView>
         </Content>

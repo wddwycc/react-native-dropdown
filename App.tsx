@@ -1,11 +1,8 @@
-import { sequenceT } from 'fp-ts/lib/Apply'
-import * as O from 'fp-ts/lib/Option'
-import { pipe } from 'fp-ts/lib/pipeable'
-import React, { FC, useCallback, useRef, useState } from 'react'
+import React, { FC } from 'react'
 import { SafeAreaView, StatusBar, Text, TouchableOpacity } from 'react-native'
 import styled from 'styled-components'
 
-import Popup, { Handler as PopupHandler, Option } from './src/Popup'
+import { Option, useDropdownMenu } from './src'
 
 const Container = styled(SafeAreaView)`
   flex: 1;
@@ -29,6 +26,7 @@ const BtnText = styled(Text)`
   font-weight: bold;
 `
 
+const INIT_SELECTED_ID = '限价委托'
 const OPTIONS: Option[] = [
   '限价委托',
   '高级限价委托',
@@ -37,40 +35,19 @@ const OPTIONS: Option[] = [
   '冰山委托',
   '时间加权委托',
 ].map(a => ({ id: a, title: a }))
+const useOrderType = () => useDropdownMenu(OPTIONS, INIT_SELECTED_ID)
 
 const App: FC = () => {
-  const btnRef = useRef<TouchableOpacity>(null)
-  const popupRef = useRef<PopupHandler>(null)
-  const onPress = useCallback(
-    () =>
-      pipe(
-        sequenceT(O.option)(
-          O.fromNullable(btnRef.current),
-          O.fromNullable(popupRef.current),
-        ),
-        O.map(([btn, popup]) => {
-          btn.measureInWindow((x, y, width, height) =>
-            popup.showFrom({ x, y, width, height }),
-          )
-        }),
-      ),
-    [btnRef, popupRef],
-  )
-  const [selectedId, setSelectedId] = useState('限价委托')
+  const { btnRef, menu, selectedId, toggle } = useOrderType()
 
   return (
     <>
       <StatusBar barStyle="light-content" />
       <Container>
-        <Btn ref={btnRef} onPress={onPress}>
+        <Btn ref={btnRef} onPress={toggle}>
           <BtnText>{OPTIONS.filter(a => a.id === selectedId)[0].title}</BtnText>
         </Btn>
-        <Popup
-          ref={popupRef}
-          options={OPTIONS}
-          selectedId={selectedId}
-          onSelectId={setSelectedId}
-        />
+        {menu}
       </Container>
     </>
   )
