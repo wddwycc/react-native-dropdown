@@ -32,7 +32,7 @@ const Content = styled(View)`
   padding: 4px 0;
 
   background-color: #1b1e29;
-  border-radius: 2px;
+  border-radius: 4px;
 `
 const ContentScrollView = styled(ScrollView)`
   flex-grow: 0;
