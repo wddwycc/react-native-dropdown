@@ -4,7 +4,7 @@ import React, { FC, useRef, useCallback, useState } from 'react'
 import { SafeAreaView, StatusBar, Text, TouchableOpacity } from 'react-native'
 import styled from 'styled-components'
 
-import Popup, { Handler as PopupHandler } from './Popup'
+import Popup, { Handler as PopupHandler, Option } from './Popup'
 import { sequenceT } from 'fp-ts/lib/Apply'
 
 const Container = styled(SafeAreaView)`
@@ -29,6 +29,15 @@ const BtnText = styled(Text)`
   font-weight: bold;
 `
 
+const OPTIONS: Option[] = [
+  '限价委托',
+  '高级限价委托',
+  '止盈止损',
+  '跟踪委托',
+  '冰山委托',
+  '时间加权委托',
+].map(a => ({ id: a, title: a }))
+
 const App: FC = () => {
   const btnRef = useRef<TouchableOpacity>(null)
   const popupRef = useRef<PopupHandler>(null)
@@ -40,22 +49,28 @@ const App: FC = () => {
           O.fromNullable(popupRef.current),
         ),
         O.map(([btn, popup]) => {
-          btn.measureInWindow((x, y, width, height) => {
-            popup.show({ x, y, width, height })
-          })
+          btn.measureInWindow((x, y, width, height) =>
+            popup.showFrom({ x, y, width, height }),
+          )
         }),
       ),
     [btnRef, popupRef],
   )
+  const [selectedId, setSelectedId] = useState('限价委托')
 
   return (
     <>
       <StatusBar barStyle="light-content" />
       <Container>
         <Btn ref={btnRef} onPress={onPress}>
-          <BtnText>限价委托</BtnText>
+          <BtnText>{OPTIONS.filter(a => a.id === selectedId)[0].title}</BtnText>
         </Btn>
-        <Popup ref={popupRef} />
+        <Popup
+          ref={popupRef}
+          options={OPTIONS}
+          selectedId={selectedId}
+          onSelectId={setSelectedId}
+        />
       </Container>
     </>
   )
