@@ -3,12 +3,19 @@ import { pipe } from 'fp-ts/lib/pipeable'
 import React, {
   forwardRef,
   RefForwardingComponent,
+  useCallback,
   useImperativeHandle,
   useMemo,
   useState,
-  useCallback,
 } from 'react'
-import { Modal, Text, TouchableOpacity, View, ViewStyle } from 'react-native'
+import {
+  Modal,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  View,
+  ViewStyle,
+} from 'react-native'
 import styled from 'styled-components'
 
 const Container = styled(Modal)``
@@ -26,6 +33,9 @@ const Content = styled(View)`
 
   background-color: #1b1e29;
   border-radius: 2px;
+`
+const ContentScrollView = styled(ScrollView)`
+  flex-grow: 0;
 `
 const Option = styled(TouchableOpacity)`
   padding: 8px;
@@ -62,6 +72,7 @@ interface Props {
   options: Option[]
   selectedId: string
   onSelectId: (a: string) => void
+  maxContentHeight?: number
 }
 
 export interface Handler {
@@ -69,9 +80,15 @@ export interface Handler {
 }
 
 const SPACING = 4
+const DEFAULT_MAX_CONTENT_HEIGHT = 200
 
 const Popup: RefForwardingComponent<Handler, Props> = (
-  { options, selectedId, onSelectId },
+  {
+    options,
+    selectedId,
+    onSelectId,
+    maxContentHeight = DEFAULT_MAX_CONTENT_HEIGHT,
+  },
   ref,
 ) => {
   const [srcRect, setSrcRect] = useState<O.Option<Rect>>(O.none)
@@ -84,10 +101,10 @@ const Popup: RefForwardingComponent<Handler, Props> = (
           top: rect.y + rect.height + SPACING,
           left: rect.x,
           width: rect.width,
-          height: 300,
+          maxHeight: maxContentHeight,
         })),
       ),
-    [srcRect],
+    [srcRect, maxContentHeight],
   )
   const onSelect = useCallback(
     (id: string) => {
@@ -105,18 +122,20 @@ const Popup: RefForwardingComponent<Handler, Props> = (
   }))
   return pipe(
     contentStyle,
-    O.map(s => (
+    O.map(contentStyle_ => (
       <Container animationType="fade" transparent={true} visible={visible}>
         <Bg onPress={() => setVisible(false)} />
-        <Content style={s}>
-          {options.map(option => (
-            <Option key={option.id} onPress={() => onSelect(option.id)}>
-              <OptionBg selected={selectedId === option.id} />
-              <OptionText selected={selectedId === option.id}>
-                {option.title}
-              </OptionText>
-            </Option>
-          ))}
+        <Content style={contentStyle_}>
+          <ContentScrollView>
+            {options.map(option => (
+              <Option key={option.id} onPress={() => onSelect(option.id)}>
+                <OptionBg selected={selectedId === option.id} />
+                <OptionText selected={selectedId === option.id}>
+                  {option.title}
+                </OptionText>
+              </Option>
+            ))}
+          </ContentScrollView>
         </Content>
       </Container>
     )),
