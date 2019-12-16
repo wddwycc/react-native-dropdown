@@ -33,7 +33,6 @@ const Content = styled(View)`
   position: absolute;
   padding: 4px 0;
 
-  background-color: #1b1e29;
   border-radius: 4px;
 `
 const ContentScrollView = styled(ScrollView)`
@@ -42,42 +41,56 @@ const ContentScrollView = styled(ScrollView)`
 const OptionView = styled(TouchableOpacity)`
   padding: 8px;
 `
-const OptionBg = styled(View)<{ selected: boolean }>`
+const OptionBg = styled(View)<{ selected: boolean; tintColor: string }>`
   position: absolute;
   top: 0;
   right: 0;
   bottom: 0;
   left: 0;
 
-  background-color: ${props => (props.selected ? '#00ccb8' : 'transparent')};
+  background-color: ${props =>
+    props.selected ? props.tintColor : 'transparent'};
   opacity: 0.08;
 `
-const OptionText = styled(Text)<{ selected: boolean }>`
-  color: ${props => (props.selected ? '#00ccb8' : '#d5dcf6')};
+const OptionText = styled(Text)<{
+  selected: boolean
+  textColor: string
+  tintColor: string
+}>`
+  color: ${props => (props.selected ? props.tintColor : props.textColor)};
   font-size: 12px;
   font-weight: bold;
 `
 
-interface Props {
+export interface StyleProps {
+  backgroundColor?: string
+  tintColor?: string
+  textColor?: string
+  btnMenuSpacing?: number
+  maxContentHeight?: number
+}
+
+interface Props extends StyleProps {
   options: Option[]
   selectedId: string
   onSelectId: (a: string) => void
-  maxContentHeight?: number
 }
 
 export interface Handler {
   showFrom: (srcRect: Rect) => void
 }
 
-const SPACING = 4
-const DEFAULT_MAX_CONTENT_HEIGHT = 200
-
 const Popup: RefForwardingComponent<Handler, Props> = (
   {
     options,
     selectedId,
     onSelectId,
-    maxContentHeight = DEFAULT_MAX_CONTENT_HEIGHT,
+    // styles
+    backgroundColor = '#1b1e29',
+    tintColor = '#00ccb8',
+    textColor = '#d5dcf6',
+    btnMenuSpacing = 4,
+    maxContentHeight = 200,
   },
   ref,
 ) => {
@@ -88,13 +101,13 @@ const Popup: RefForwardingComponent<Handler, Props> = (
       pipe(
         srcRect,
         O.map(rect => ({
-          top: rect.y + rect.height + SPACING,
+          top: rect.y + rect.height + btnMenuSpacing,
           left: rect.x,
           width: rect.width,
           maxHeight: maxContentHeight,
         })),
       ),
-    [srcRect, maxContentHeight],
+    [srcRect, btnMenuSpacing, maxContentHeight],
   )
   const onSelect = useCallback(
     (id: string) => {
@@ -116,12 +129,19 @@ const Popup: RefForwardingComponent<Handler, Props> = (
     O.map(contentStyle_ => (
       <Container animationType="fade" transparent={true} visible={visible}>
         <Bg onPress={() => setVisible(false)} />
-        <Content style={contentStyle_}>
+        <Content style={[contentStyle_, { backgroundColor }]}>
           <ContentScrollView>
             {options.map(option => (
               <OptionView key={option.id} onPress={() => onSelect(option.id)}>
-                <OptionBg selected={selectedId === option.id} />
-                <OptionText selected={selectedId === option.id}>
+                <OptionBg
+                  selected={selectedId === option.id}
+                  tintColor={tintColor}
+                />
+                <OptionText
+                  selected={selectedId === option.id}
+                  textColor={textColor}
+                  tintColor={tintColor}
+                >
                   {option.title}
                 </OptionText>
               </OptionView>

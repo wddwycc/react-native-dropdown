@@ -4,10 +4,17 @@ import { pipe } from 'fp-ts/lib/pipeable'
 import React, { useCallback, useMemo, useRef, useState } from 'react'
 import { TouchableOpacity } from 'react-native'
 
-import DropdownMenu, { Handler as DropdownMenuHandler } from './DropdownMenu'
+import DropdownMenu, {
+  Handler as DropdownMenuHandler,
+  StyleProps,
+} from './DropdownMenu'
 import { Option } from './types'
 
-export const useDropdownMenu = (options: Option[], initSelectedId: string) => {
+export const useDropdownMenu = (
+  options: Option[],
+  initSelectedId: string,
+  styles?: StyleProps,
+) => {
   const [selectedId, setSelectedId] = useState(initSelectedId)
   const btnRef = useRef<TouchableOpacity>(null)
   const menuRef = useRef<DropdownMenuHandler>(null)
@@ -35,9 +42,10 @@ export const useDropdownMenu = (options: Option[], initSelectedId: string) => {
         options={options}
         selectedId={selectedId}
         onSelectId={setSelectedId}
+        {...styles}
       />
     ),
-    [selectedId, options],
+    [selectedId, options, styles],
   )
   return {
     btnRef,
