@@ -71,9 +71,12 @@ const OptionText = styled(Text)<{
 `
 
 export interface StyleProps {
+  animationStyle?: 'none' | 'fade'
+
   backgroundColor?: string
   tintColor?: string
   textColor?: string
+
   btnMenuSpacing?: number
   maxContentHeight?: number
 }
@@ -94,6 +97,7 @@ const Popup: RefForwardingComponent<Handler, Props> = (
     selectedId,
     onSelectId,
     // styles
+    animationStyle = 'none',
     backgroundColor = '#1b1e29',
     tintColor = '#00ccb8',
     textColor = '#d5dcf6',
@@ -135,7 +139,11 @@ const Popup: RefForwardingComponent<Handler, Props> = (
   return pipe(
     contentStyle,
     O.map(contentStyle_ => (
-      <Container animationType="fade" transparent={true} visible={visible}>
+      <Container
+        animationType={animationStyle}
+        transparent={true}
+        visible={visible}
+      >
         <Bg onPress={() => setVisible(false)} />
         <Content style={[contentStyle_, { backgroundColor }]}>
           <ContentScrollView>
