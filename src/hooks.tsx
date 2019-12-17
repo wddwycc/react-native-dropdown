@@ -50,7 +50,6 @@ export const useDropdownMenu = (
   return {
     btnRef,
     menu,
-    selectedId,
     toggle,
   }
 }

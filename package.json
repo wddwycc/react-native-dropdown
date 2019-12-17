@@ -1,12 +1,14 @@
 {
   "name": "react-native-dropdown-list",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "react-native dropdown menu",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/wddwycc/react-native-dropdown-list.git"
   },
-  "files": ["dist/"],
+  "files": [
+    "dist/"
+  ],
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
@@ -20,7 +22,7 @@
   "dependencies": {
     "fp-ts": "^2.3.1",
     "react": "^16.9.0",
-    "react-native": "^0.61.5",
+    "react-native": "^0.60.0",
     "styled-components": "^4.4.1"
   },
   "devDependencies": {
