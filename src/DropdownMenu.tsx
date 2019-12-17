@@ -20,7 +20,15 @@ import styled from 'styled-components'
 
 import { Option, Rect } from './types'
 
-const Container = styled(Modal)``
+const Container = styled(Modal).attrs({
+  supportedOrientations: [
+    'portrait',
+    'portrait-upside-down',
+    'landscape',
+    'landscape-left',
+    'landscape-right',
+  ],
+})``
 const Bg = styled(TouchableOpacity).attrs({ activeOpacity: 1 })`
   position: absolute;
   top: 0;
