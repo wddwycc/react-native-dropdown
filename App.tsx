@@ -35,13 +35,14 @@ const OPTIONS: Option[] = [
   '冰山委托',
   '时间加权委托',
 ].map(a => ({ id: a, title: a }))
-const useOrderType = () => {
-  const [selectedId, setSelectedId] = useState(INIT_SELECTED_ID)
-  return useDropdownMenu(OPTIONS, selectedId, setSelectedId)
-}
 
 const App: FC = () => {
-  const { btnRef, menu, selectedId, toggle } = useOrderType()
+  const [selectedId, setSelectedId] = useState(INIT_SELECTED_ID)
+  const { btnRef, menu, toggle } = useDropdownMenu(
+    OPTIONS,
+    selectedId,
+    setSelectedId,
+  )
 
   return (
     <>

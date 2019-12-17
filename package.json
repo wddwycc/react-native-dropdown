@@ -1,6 +1,6 @@
 {
   "name": "react-native-dropdown-list",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "react-native dropdown menu",
   "repository": {
     "type": "git",
@@ -36,8 +36,8 @@
     "eslint-plugin-react-hooks": "^2.3.0",
     "jest": "24.9.0",
     "metro-react-native-babel-preset": "0.56.3",
-    "react": "^16.9.0",
-    "react-native": "^0.60",
+    "react": "*",
+    "react-native": "*",
     "react-native-typescript-transformer": "^1.2.13",
     "react-test-renderer": "16.9.0",
     "typescript": "^3.7.3"
