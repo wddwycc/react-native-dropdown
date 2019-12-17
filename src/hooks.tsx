@@ -1,7 +1,7 @@
 import { sequenceT } from 'fp-ts/lib/Apply'
 import * as O from 'fp-ts/lib/Option'
 import { pipe } from 'fp-ts/lib/pipeable'
-import React, { useCallback, useMemo, useRef, useState } from 'react'
+import React, { useCallback, useMemo, useRef } from 'react'
 import { TouchableOpacity } from 'react-native'
 
 import DropdownMenu, {
@@ -12,10 +12,10 @@ import { Option } from './types'
 
 export const useDropdownMenu = (
   options: Option[],
-  initSelectedId: string,
+  selectedId: string,
+  onSelectId: (a: string) => void,
   styles?: StyleProps,
 ) => {
-  const [selectedId, setSelectedId] = useState(initSelectedId)
   const btnRef = useRef<TouchableOpacity>(null)
   const menuRef = useRef<DropdownMenuHandler>(null)
 
@@ -41,11 +41,11 @@ export const useDropdownMenu = (
         ref={menuRef}
         options={options}
         selectedId={selectedId}
-        onSelectId={setSelectedId}
+        onSelectId={onSelectId}
         {...styles}
       />
     ),
-    [selectedId, options, styles],
+    [selectedId, onSelectId, options, styles],
   )
   return {
     btnRef,
