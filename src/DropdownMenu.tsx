@@ -103,7 +103,7 @@ const Popup: RefForwardingComponent<Handler, Props> = (
         O.map(rect => ({
           top: rect.y + rect.height + btnMenuSpacing,
           left: rect.x,
-          width: rect.width,
+          minWidth: rect.width,
           maxHeight: maxContentHeight,
         })),
       ),
