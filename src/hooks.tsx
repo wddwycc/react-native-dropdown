@@ -13,14 +13,12 @@ import { Option } from './types'
 export interface UseDropdownMenuPayload {
   options: Option[]
   selectedId: string
-  onSelectId: (a: string) => void
   direction?: 'above' | 'below'
   styles?: StyleProps
 }
 export const useDropdownMenu = ({
   options,
   selectedId,
-  onSelectId,
   direction = 'below',
   styles,
 }: UseDropdownMenuPayload) => {
@@ -49,12 +47,11 @@ export const useDropdownMenu = ({
         ref={menuRef}
         options={options}
         selectedId={selectedId}
-        onSelectId={onSelectId}
         direction={direction}
         {...styles}
       />
     ),
-    [options, selectedId, onSelectId, direction, styles],
+    [options, selectedId, direction, styles],
   )
   return {
     btnRef,

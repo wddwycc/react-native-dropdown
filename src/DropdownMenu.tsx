@@ -3,7 +3,6 @@ import { pipe } from 'fp-ts/lib/pipeable'
 import React, {
   forwardRef,
   RefForwardingComponent,
-  useCallback,
   useImperativeHandle,
   useMemo,
   useState,
@@ -85,7 +84,6 @@ export interface StyleProps {
 interface Props extends StyleProps {
   options: Option[]
   selectedId: string
-  onSelectId: (a: string) => void
   direction: 'above' | 'below'
 }
 
@@ -97,7 +95,6 @@ const Popup: RefForwardingComponent<Handler, Props> = (
   {
     options,
     selectedId,
-    onSelectId,
     direction,
     // styles
     animationStyle = 'none',
@@ -136,14 +133,6 @@ const Popup: RefForwardingComponent<Handler, Props> = (
       ),
     [srcRect, windowHeight, direction, btnMenuSpacing, maxContentHeight],
   )
-  const onSelect = useCallback(
-    (id: string) => {
-      onSelectId(id)
-      setVisible(false)
-    },
-    [onSelectId, setVisible],
-  )
-
   useImperativeHandle(ref, () => ({
     showFrom: rect => {
       setWindowHeight(Dimensions.get('window').height)
@@ -164,7 +153,13 @@ const Popup: RefForwardingComponent<Handler, Props> = (
         <Content style={[contentStyle_, { backgroundColor }]}>
           <ContentScrollView>
             {options.map(option => (
-              <OptionView key={option.id} onPress={() => onSelect(option.id)}>
+              <OptionView
+                key={option.id}
+                onPress={() => {
+                  option.onSelect()
+                  setVisible(false)
+                }}
+              >
                 <OptionBg
                   selected={selectedId === option.id}
                   tintColor={tintColor}

@@ -8,4 +8,5 @@ export interface Rect {
 export interface Option {
   id: string
   title: string
+  onSelect: () => void
 }
