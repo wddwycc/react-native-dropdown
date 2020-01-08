@@ -19,11 +19,11 @@ const OPTIONS: Option[] = [
 
 const App: FC = () => {
   const [selectedId, setSelectedId] = useState(INIT_SELECTED_ID)
-  const { btnRef, menu, toggle } = useDropdownMenu(
-    OPTIONS,
+  const { btnRef, menu, toggle } = useDropdownMenu({
+    options: OPTIONS,
     selectedId,
-    setSelectedId,
-  )
+    onSelectId: setSelectedId,
+  })
 
   return (
     <>

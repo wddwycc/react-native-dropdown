@@ -15,6 +15,7 @@ import {
   TouchableOpacity,
   View,
   ViewStyle,
+  Dimensions,
 } from 'react-native'
 import styled from 'styled-components'
 
@@ -85,6 +86,7 @@ interface Props extends StyleProps {
   options: Option[]
   selectedId: string
   onSelectId: (a: string) => void
+  direction: 'above' | 'below'
 }
 
 export interface Handler {
@@ -96,6 +98,7 @@ const Popup: RefForwardingComponent<Handler, Props> = (
     options,
     selectedId,
     onSelectId,
+    direction,
     // styles
     animationStyle = 'none',
     backgroundColor = '#1b1e29',
@@ -108,18 +111,30 @@ const Popup: RefForwardingComponent<Handler, Props> = (
 ) => {
   const [srcRect, setSrcRect] = useState<O.Option<Rect>>(O.none)
   const [visible, setVisible] = useState(false)
+  const [windowHeight, setWindowHeight] = useState(0)
   const contentStyle: O.Option<ViewStyle> = useMemo(
     () =>
       pipe(
         srcRect,
-        O.map(rect => ({
-          top: rect.y + rect.height + btnMenuSpacing,
-          left: rect.x,
-          minWidth: rect.width,
-          maxHeight: maxContentHeight,
-        })),
+        O.map(rect => {
+          if (direction === 'below') {
+            return {
+              top: rect.y + rect.height + btnMenuSpacing,
+              left: rect.x,
+              minWidth: rect.width,
+              maxHeight: maxContentHeight,
+            }
+          } else {
+            return {
+              bottom: windowHeight - rect.y + btnMenuSpacing,
+              left: rect.x,
+              minWidth: rect.width,
+              maxHeight: maxContentHeight,
+            }
+          }
+        }),
       ),
-    [srcRect, btnMenuSpacing, maxContentHeight],
+    [srcRect, windowHeight, direction, btnMenuSpacing, maxContentHeight],
   )
   const onSelect = useCallback(
     (id: string) => {
@@ -131,6 +146,7 @@ const Popup: RefForwardingComponent<Handler, Props> = (
 
   useImperativeHandle(ref, () => ({
     showFrom: rect => {
+      setWindowHeight(Dimensions.get('window').height)
       setSrcRect(O.some(rect))
       setVisible(true)
     },

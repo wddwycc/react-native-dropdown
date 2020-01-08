@@ -10,12 +10,20 @@ import DropdownMenu, {
 } from './DropdownMenu'
 import { Option } from './types'
 
-export const useDropdownMenu = (
-  options: Option[],
-  selectedId: string,
-  onSelectId: (a: string) => void,
-  styles?: StyleProps,
-) => {
+export interface UseDropdownMenuPayload {
+  options: Option[]
+  selectedId: string
+  onSelectId: (a: string) => void
+  direction?: 'above' | 'below'
+  styles?: StyleProps
+}
+export const useDropdownMenu = ({
+  options,
+  selectedId,
+  onSelectId,
+  direction = 'below',
+  styles,
+}: UseDropdownMenuPayload) => {
   const btnRef = useRef<TouchableOpacity>(null)
   const menuRef = useRef<DropdownMenuHandler>(null)
 
@@ -42,10 +50,11 @@ export const useDropdownMenu = (
         options={options}
         selectedId={selectedId}
         onSelectId={onSelectId}
+        direction={direction}
         {...styles}
       />
     ),
-    [selectedId, onSelectId, options, styles],
+    [options, selectedId, onSelectId, direction, styles],
   )
   return {
     btnRef,
