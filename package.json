@@ -1,7 +1,8 @@
 {
   "name": "react-native-dropdown-list",
-  "version": "0.2.2",
+  "version": "0.3.0",
   "description": "react-native dropdown menu",
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/wddwycc/react-native-dropdown-list.git"
@@ -20,8 +21,12 @@
     "release": "rm -rf dist && tsc -p src && npm publish"
   },
   "dependencies": {
-    "fp-ts": "^2.0",
-    "styled-components": "^4.4.1"
+    "fp-ts": "^2.0"
+  },
+  "peerDependencies": {
+    "react": "*",
+    "react-native": "*",
+    "styled-components": "^5.0.0"
   },
   "devDependencies": {
     "@babel/core": "7.7.5",
@@ -36,10 +41,11 @@
     "eslint-plugin-react-hooks": "^2.3.0",
     "jest": "24.9.0",
     "metro-react-native-babel-preset": "0.56.3",
-    "react": "*",
-    "react-native": "*",
+    "react": "16.9.0",
+    "react-native": "0.61.5",
     "react-native-typescript-transformer": "^1.2.13",
     "react-test-renderer": "16.9.0",
+    "styled-components": "^5.0.0",
     "typescript": "^3.7.3"
   },
   "jest": {
